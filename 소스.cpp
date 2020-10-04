@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 		std::string fileName;
 		std::cin >> fileName;
 
-		std::ifstream in(fileName);
+		std::ifstream in(fileName, std::ios::binary);
 		if (!in) {
 			std::cout << "존재하지 않는 파일 이름입니다.\n";
 			continue;
@@ -102,6 +102,7 @@ int main(int argc, char* argv[])
 		}
 
 		std::cout << buf << std::endl;
+		std::cout << strlen(buf) << std::endl;
 
 		printf("[TCP클라이언트] %d+%d바이트를 보냈습니다\n",
 			sizeof(int), retval);
@@ -117,8 +118,7 @@ void input_data(char* dest, std::ifstream& in, std::string& s)
 {
 	strcpy(dest, s.c_str());
 	int idx = s.size();
-	while (in) {
-		dest[idx] = static_cast<char>(in.get());
-		++idx;
+	while (!in.eof()) {
+		dest[idx++] = (char)in.get();
 	}
 }
